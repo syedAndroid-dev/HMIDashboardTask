@@ -1,0 +1,35 @@
+<vector xmlns:android="http://android.com"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100"
+    tools:ignore="NamespaceTypo">
+
+    <!-- Outer/Inner Tire Shape -->
+    <path
+        android:strokeColor="#00FF66"
+        android:strokeWidth="4.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000"
+        android:pathData="M 28,28 C 25,28 23,34 23,45 C 23,66 33,76 50,76 C 67,76 77,66 77,45 C 77,34 75,28 72,28 M 72,28 C 68,28 68,34 68,42 C 68,59 60,67 50,67 C 40,67 32,59 32,42 C 32,34 32,28 28,28 Z" />
+
+    <!-- Bottom Tire Treads -->
+    <path
+        android:strokeColor="#00FF66"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M 36,75 L 34,81 M 43,76 L 42,82 M 50,76 L 50,83 M 57,76 L 58,82 M 64,75 L 66,81" />
+
+    <!-- Letter 'T' -->
+    <path
+        android:fillColor="#00FF66"
+        android:pathData="M 38,43 L 48,43 L 48,61 L 44,61 L 44,47 L 38,47 Z" />
+
+    <!-- Letter 'C' -->
+    <path
+        android:fillColor="#00FF66"
+        android:pathData="M 62,45 C 61,43 59,42 56,42 C 52,42 50,45 50,52 C 50,59 52,62 56,62 C 59,62 61,61 62,59 L 62,63 C 60,64 58,65 55,65 C 50,65 46,60 46,52 C 46,44 50,39 55,39 C 58,39 61,40 62,42 Z" />
+</vector>
