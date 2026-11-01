@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -47,14 +49,20 @@ dependencies {
 
     // Coil Compose integration
     implementation(libs.coil.compose)
-    // Networking engine required by Coil 3.x to fetch network images
     implementation(libs.coil.network.okhttp)
-    // Coil SVG support
     implementation(libs.coil.svg)
 
-    // For core icons only
     implementation(libs.compose.material.icons.core)
     implementation(libs.compose.material.icons.extended)
+
+    // Dagger Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    testImplementation(libs.kotlinx.coroutines.test.v1102)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     testImplementation(libs.junit)

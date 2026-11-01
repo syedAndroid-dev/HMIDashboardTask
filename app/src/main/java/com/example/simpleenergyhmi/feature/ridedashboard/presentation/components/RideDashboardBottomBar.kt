@@ -19,11 +19,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.example.simpleenergyhmi.R
 import com.example.simpleenergyhmi.core.theme.SimpleEnergyHMITheme
+import com.example.simpleenergyhmi.feature.ridedashboard.domain.model.MotorStatus
+import com.example.simpleenergyhmi.feature.ridedashboard.domain.model.RideDashbordSignal
 
 enum class IndicatorStatus{
     LEFT,
@@ -47,7 +50,7 @@ private fun RideDashboardBottomBarPreview() {
             isServiceDueEnabled = false,
             isTractionControllEnabled = false,
             batteryPercentage = "100%",
-            motorStatus = "ON",
+            motorStatus = RideDashbordSignal.Valid(MotorStatus.ON, System.currentTimeMillis()),
             onSettingsMenuClicked = {},
             onMapNavigationClicked = {},
             onTpmsClicked = {}
@@ -64,7 +67,7 @@ fun RideDashboardBottomBar(
     isServiceDueEnabled: Boolean,
     isTractionControllEnabled: Boolean,
     batteryPercentage: String,
-    motorStatus: String,
+    motorStatus: RideDashbordSignal<MotorStatus>,
     onSettingsMenuClicked: () -> Unit,
     onMapNavigationClicked: () -> Unit,
     onTpmsClicked: () -> Unit
@@ -128,6 +131,7 @@ fun RideDashboardBottomBar(
                         .size(24.dp),
                     model = R.drawable.ic_high_beam,
                     contentDescription = "Incognito mode icon",
+                    colorFilter = ColorFilter.tint(Color.Blue)
                 )
             }
 
@@ -144,6 +148,7 @@ fun RideDashboardBottomBar(
                         .size(24.dp),
                     model = R.drawable.ic_side_stand,
                     contentDescription = "Incognito mode icon",
+                    colorFilter = ColorFilter.tint(Color.Yellow)
                 )
             }
 
@@ -159,6 +164,7 @@ fun RideDashboardBottomBar(
                         .size(44.dp),
                     model = R.drawable.ic_left_indicator,
                     contentDescription = "Incognito mode icon",
+                    colorFilter = ColorFilter.tint(Color.Green)
                 )
             }
 
@@ -175,7 +181,7 @@ fun RideDashboardBottomBar(
                         .size(30.dp),
                     model = R.drawable.ic_service_due,
                     contentDescription = "Incognito mode icon",
-                )
+                    colorFilter = ColorFilter.tint(Color(0xFFFFA500))               )
             }
         }
 
@@ -197,6 +203,7 @@ fun RideDashboardBottomBar(
                         .size(30.dp),
                     model = R.drawable.ic_traction_controll,
                     contentDescription = "Incognito mode icon",
+                    colorFilter = ColorFilter.tint(Color.Green)
                 )
             }
 
@@ -213,6 +220,7 @@ fun RideDashboardBottomBar(
                         .size(30.dp),
                     model = R.drawable.ic_right_indicator,
                     contentDescription = "Incognito mode icon",
+                    colorFilter = ColorFilter.tint(Color.Green)
                 )
             }
 
@@ -235,7 +243,7 @@ fun RideDashboardBottomBar(
             Card(
                 onClick = {},
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.White.copy(alpha = .2f)
+                    containerColor = Color.Green.copy(alpha = .2f)
                 ),
                 shape = CircleShape
             ) {
@@ -249,44 +257,69 @@ fun RideDashboardBottomBar(
                             .size(30.dp),
                         model = R.drawable.ic_battery,
                         contentDescription = "Incognito mode icon",
+                        colorFilter = ColorFilter.tint(Color.Green)
                     )
                     Spacer(
                         modifier = Modifier.padding(2.dp)
                     )
                     Text(
                         text = batteryPercentage,
-                        color = Color.White
+                        color = Color.Green,
                     )
                 }
             }
 
-            Card(
-                onClick = {},
-                colors = CardDefaults.cardColors(
-                    containerColor = Color.White.copy(alpha = .2f)
-                ),
-                shape = CircleShape
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        modifier = Modifier.padding(10.dp),
-                        imageVector = Icons.Default.ElectricScooter,
-                        tint = Color.White,
-                        contentDescription = "Settings"
-                    )
-                    Spacer(
-                        modifier = Modifier.padding(2.dp)
-                    )
-                    Text(
-                        text = motorStatus,
-                        color = Color.White
-                    )
-                }
+            MotorStatusCard(motorStatus)
+        }
+    }
+}
 
+@Composable
+private fun MotorStatusCard(motorStatus: RideDashbordSignal<MotorStatus>) {
+
+    val (motorValue, color) = when (motorStatus) {
+
+        is RideDashbordSignal.Valid -> {
+            when (motorStatus.value) {
+                MotorStatus.ON -> "ON" to Color.Green
+                MotorStatus.OFF -> "OFF" to Color.Red
             }
+        }
+
+        is RideDashbordSignal.Invalid ->
+            "INVALID" to Color.Yellow
+
+        is RideDashbordSignal.Stale ->
+            "STALE" to Color.Yellow
+
+        RideDashbordSignal.Unavailable ->
+            "UNAVAILABLE" to Color.Gray
+    }
+
+    Card(
+        onClick = {},
+        colors = CardDefaults.cardColors(
+            containerColor = color.copy(alpha = .2f)
+        ),
+        shape = CircleShape
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                modifier = Modifier.padding(10.dp),
+                imageVector = Icons.Default.ElectricScooter,
+                tint = color,
+                contentDescription = "Settings"
+            )
+            Spacer(
+                modifier = Modifier.padding(2.dp)
+            )
+            Text(
+                text = motorValue,
+                color = color
+            )
         }
     }
 }
